@@ -23,8 +23,16 @@ def main_menu():
 
 
 def magic_8_ball():
-
-
+    responses = ["My sources say no", "My sources say yes"]
+    response = responses[random.randint(1, len(responses))]
+    while True:
+        question = input("What would you like to ask the Magic 8 Ball? Yes/no questions only\nPress '0' to return to main menu\n")
+        if question == "0":
+            main_menu()
+            break
+        else:
+            print("Your question: {}\nMagic 8 Ball's answer: {}".format(question, response))
+            time.sleep(1.4)
 
 
 
