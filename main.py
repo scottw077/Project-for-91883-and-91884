@@ -28,26 +28,35 @@ def main_menu():
 
 def magic_8_ball():
     responses = [colour(210, 4, 35, "My sources say no"), colour(0, 255, 0, "My sources say yes"), colour(255, 140, 0, "I don't know"),
-                 colour(255, 140, 0, "Please re-enter question"), "Yeah obviously", "Clearly not", "Yeah, I am {} percent sure".format((random.randint(1, 100))),
-                 "No, I am {} percent sure".format((random.randint(1, 100)))]
+                 colour(255, 140, 0, "Please re-enter question"), colour(0, 255, 0, "Yeah obviously"), colour(210, 4, 35, "Clearly not"),
+                 colour(0, 255, 0, "Yeah, I am {} percent sure").format((random.randint(1, 100))), colour(210, 4, 35, "No, I am {} percent sure").format((random.randint(1, 100)))]
     while True:
-        response = responses[random.randint(1, len(responses))]
-        print(colour(106, 100, 230, "What would you like to ask the Magic 8 Ball? Yes/no questions only"))
-        question = input(colour(210, 4, 35, "Press '0' to return to main menu\n"))
+        response = responses[random.randint(0, len(responses))]
+        print(colour(106, 100, 230, "\nWhat would you like to ask the Magic 8 Ball? Yes/no questions only"))
+        question = input(colour(255, 49, 49, "Press '0' to return to main menu\n"))
         if question == "0":
             main_menu()
             break
         else:
-            print("Your question: {}\nMagic 8 Ball's answer: {}".format(question, response))
+            print("\nYour question: {}\nMagic 8 Ball's answer: {}".format(colour(0, 193, 255, question), response))
             time.sleep(1.4)
 
 
-
-
-
 def predefined_lists():
-    print("chicken")
-
+    fast_food = ["Subway", "Mcdonald's", "Burger King", "KFC", "Wendy's", "Domino's Pizza", "Pizza Hut", "Carl's Jr"]
+    streaming_platforms = ["Netflix", "Disney+", "Neon", "Youtube", "Twitch", "Prime Video", "Hulu", "TVNZ", "Three Now"]
+    while True:
+        print(colour(106, 100, 230, "\nType in the number corresponding to the List you want a random item from"))
+        the_predefined_lists = ("Press '0' to return to main menu\nPress '1' for Fast Food Restaurants\nPress '2' for Streaming Platforms\n"
+                            "Press '3' for Burger Type\nPress '4' for Pizza Type\nPress '5' for a Video game\n")
+        predefined_lists_input = int(input(the_predefined_lists))
+        if predefined_lists_input == 0:
+            main_menu()
+            break
+        elif predefined_lists_input == 1:
+            print(fast_food[random.randint(0, len(fast_food) -1)])
+        elif predefined_lists_input == 2:
+            print(streaming_platforms[random.randint(0, len(streaming_platforms) -1)])
 
 
 
