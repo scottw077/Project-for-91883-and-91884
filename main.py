@@ -4,6 +4,11 @@ import time
 def colour(r, g, b, text):
     return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(r,g,b,text)
 
+
+
+responses = [colour(210, 4, 35, "My sources say no"), colour(0, 255, 0, "My sources say yes"), colour(255, 140, 0, "I don't know"),
+             colour(255, 140, 0, "Please re-enter question"), colour(0, 255, 0, "Yeah obviously"), colour(210, 4, 35, "Clearly not"),
+             colour(0, 255, 0, "Yeah, I am {} percent sure").format((random.randint(1, 100))), colour(210, 4, 35, "No, I am {} percent sure").format((random.randint(1, 100)))]
 #main menu
 def main_menu():
     while True:
@@ -27,11 +32,8 @@ def main_menu():
 
 
 def magic_8_ball():
-    responses = [colour(210, 4, 35, "My sources say no"), colour(0, 255, 0, "My sources say yes"), colour(255, 140, 0, "I don't know"),
-                 colour(255, 140, 0, "Please re-enter question"), colour(0, 255, 0, "Yeah obviously"), colour(210, 4, 35, "Clearly not"),
-                 colour(0, 255, 0, "Yeah, I am {} percent sure").format((random.randint(1, 100))), colour(210, 4, 35, "No, I am {} percent sure").format((random.randint(1, 100)))]
     while True:
-        response = responses[random.randint(0, len(responses))]
+        response = responses[random.randint(0, len(responses) -1)]
         print(colour(106, 100, 230, "\nWhat would you like to ask the Magic 8 Ball? Yes/no questions only"))
         question = input(colour(255, 49, 49, "Press '0' to return to main menu\n"))
         if question == "0":
@@ -78,10 +80,9 @@ def predefined_lists():
             time.sleep(0.8)
 
 
-
 def admin_login_menu():
     while True:
-        admin_login_menu_input = input("Please input a username\nPress '0' to return to main menu\n")
+        admin_login_menu_input = input("Please input a username\nPress '0' to return to main menu\n").strip().lower()
         if admin_login_menu_input == "0":
             main_menu()
             break
@@ -91,21 +92,41 @@ def admin_login_menu():
                 main_menu()
                 break
             elif admin_pass == "gruiscool123":
+                print(colour(0, 255, 0, "Successfully signed in"))
                 admin_menu()
                 break
             else:
-                print(colour(210, 4, 35, "Wrong password/username please try again"))
+                print(colour(210, 4, 35, "Wrong password please try again"))
                 time.sleep(1)
         else:
-            print(colour(210, 4, 35, "Wrong password/username please try again"))
+            print(colour(210, 4, 35, "Wrong username please try again"))
             time.sleep(1)
 
 
-
-
-
 def admin_menu():
-    print("pizza")
+    while True:
+        admin_menu_selector = int(input("Press '0' to return to main menu\nPress '1' to open Magic 8 Ball backend\nPress '2' to open Predefined lists backend\n"))
+        if admin_menu_selector == 0:
+            main_menu()
+            break
+        elif admin_menu_selector == 1:
+            magic_8_ball_backend()
+            break
+        elif admin_menu_selector == 2:
+            predefined_lists_backend()
+            break
+        else:
+            print(colour(210, 4, 35, "That's not a valid option!"))
 
+def magic_8_ball_backend():
+    while True:
+        magic8_admin_selector = int(input("Press '0' to return to main menu\nPress '1' to add responses\nPress '2' to remove responses\n"))
+        if magic8_admin_selector == 0:
+            main_menu()
+            break
+        elif magic8_admin_selector == 1:
 
-main_menu()
+            responses.append(pie)
+            print(responses)
+
+magic_8_ball_backend()
