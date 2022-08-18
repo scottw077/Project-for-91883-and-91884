@@ -130,7 +130,7 @@ def magic_8_ball_backend():
                                             "Press '2' to add the colour red to new response\nPress '3' to add the colour orange to new response\n"))
 
             if new_response_colour == 0:
-                admin_menu
+                admin_menu()
                 break
 
             elif new_response_colour == 1:
@@ -194,7 +194,10 @@ def magic_8_ball_backend():
                 print(colour(210, 4, 35, "Invalid option please try again"))
 
         elif magic8_admin_selector == 2:
-            for i, response in responses:
+                response in responses:
+                for i in range(1, 2):
+                    print("{}. {}".format(i, response))
+
 
 
             response_del = input("What response would you like to delete? Please enter the number next to the response\n")
