@@ -5,7 +5,6 @@ def colour(r, g, b, text):
     return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(r,g,b,text)
 
 
-
 responses = [colour(210, 4, 35, "My sources say no"), colour(0, 255, 0, "My sources say yes"), colour(255, 140, 0, "I don't know"),
              colour(255, 140, 0, "Please re-enter question"), colour(0, 255, 0, "Yeah obviously"), colour(210, 4, 35, "Clearly not"),
              colour(0, 255, 0, "Yeah, I am {} percent sure").format((random.randint(1, 100))), colour(210, 4, 35, "No, I am {} percent sure").format((random.randint(1, 100)))]
@@ -120,13 +119,91 @@ def admin_menu():
 
 def magic_8_ball_backend():
     while True:
-        magic8_admin_selector = int(input("Press '0' to return to main menu\nPress '1' to add responses\nPress '2' to remove responses\n"))
+        magic8_admin_selector = int(input("Press '0' to return to admin menu\nPress '1' to add responses\nPress '2' to remove responses\n"))
         if magic8_admin_selector == 0:
-            main_menu()
+            admin_menu()
             break
-        elif magic8_admin_selector == 1:
 
-            responses.append(pie)
+        elif magic8_admin_selector == 1:
+            new_response = input("Please type the response you want to add\n")
+            new_response_colour = int(input("Press '0' to return to admin menu\nPress '1' to add the colour green to response\n"
+                                            "Press '2' to add the colour red to new response\nPress '3' to add the colour orange to new response\n"))
+
+            if new_response_colour == 0:
+                admin_menu
+                break
+
+            elif new_response_colour == 1:
+                new_response = colour(0, 255, 0, new_response)
+                print(new_response)
+                while True:
+                    confirmation = input("Are you sure you want to add this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
+                    print(colour(210, 4, 35, "Response successfully removed"))
+                    if confirmation == "n":
+                        magic_8_ball_backend()
+                        new_response = ""
+                        break
+                        break
+                    elif confirmation == "y":
+                        responses.append(new_response)
+                        print(new_response)
+                        print(colour(0, 255, 0, "Successfully added to responses"))
+                        break
+                    else:
+                        print(colour(210, 4, 35, "Invalid response please try again"))
+
+
+            elif new_response_colour == 2:
+                new_response = colour(210, 4, 35, new_response)
+                print(new_response)
+                while True:
+                    confirmation = input("Are you sure you want to add this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
+                    if confirmation == "n":
+                        print(colour(210, 4, 35, "Response successfully removed"))
+                        magic_8_ball_backend()
+                        new_response = ""
+                        break
+                        break
+                    elif confirmation == "y":
+                        responses.append(new_response)
+                        print(new_response)
+                        print(colour(0, 255, 0, "Successfully added to responses"))
+                        break
+                    else:
+                        print(colour(210, 4, 35, "Invalid response please try again"))
+
+            elif new_response_colour == 3:
+                new_response = colour(255, 140, 0, new_response)
+                print(new_response)
+                while True:
+                    confirmation = input("Are you sure you want to add this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
+                    if confirmation == "n":
+                        print(colour(210, 4, 35, "Response successfully removed"))
+                        magic_8_ball_backend()
+                        new_response = ""
+                        break
+                        break
+                    elif confirmation == "y":
+                        responses.append(new_response)
+                        print(new_response)
+                        print(colour(0, 255, 0, "Successfully added to responses"))
+                        break
+                    else:
+                        print(colour(210, 4, 35, "Invalid response please try again"))
+            else:
+                print(colour(210, 4, 35, "Invalid option please try again"))
+
+        elif magic8_admin_selector == 2:
+            for i, response in responses:
+
+
+            response_del = input("What response would you like to delete? Please enter the number next to the response\n")
+            del responses[int(response_del)]
             print(responses)
+
+
+
+
+
 
 magic_8_ball_backend()
