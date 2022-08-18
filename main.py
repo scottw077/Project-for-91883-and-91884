@@ -131,8 +131,8 @@ def magic_8_ball_backend():
 
         elif magic8_admin_selector == 1:
             new_response = input("Please type the response you want to add\n")
-            new_response_colour = int(input("Press '0' to return to admin menu\nPress '1' to add the colour green to response\n"
-                                            "Press '2' to add the colour red to new response\nPress '3' to add the colour orange to new response\n"))
+            new_response_colour = int(input("Press '0' to return to admin menu\nPress '1' to add the colour {} to new response\n"
+                                            "Press '2' to add the colour {} to new response\nPress '3' to add the colour {} to new response\n".format(colour(0, 255, 0, "green"), colour(210, 4, 35, "red"), colour(255, 140, 0, "orange"))))
 
             if new_response_colour == 0:
                 admin_menu()
@@ -196,20 +196,35 @@ def magic_8_ball_backend():
                 print(colour(210, 4, 35, "Invalid option please try again"))
 
         elif magic8_admin_selector == 2:
-            num = 0
-            for response in responses:
-                num += 1
-                print("{}. {}".format(num, response))
-            response_del = int(input("What response would you like to delete? Please enter the number next to the response\n"))
-            del responses[(response_del-1)]
-            print(colour(210, 4, 35, "Response successfully removed"))
+            while True:
+                num = 0
+                for response in responses:
+                    num += 1
+                    print("{}. {}".format(num, response))
+                try:
+                    response_del = int(input("What response would you like to delete? Please enter the number next to the response\n"))
+                    del responses[(response_del-1)]
+                    print(colour(210, 4, 35, "Response successfully removed"))
+                    break
+                except:
+                    print(colour(210, 4, 35, "Please enter a valid number\n"))
+                    time.sleep(0.8)
+
         else:
             print(colour(210, 4, 35, "Invalid input"))
             time.sleep(0.8)
 
 def predefined_lists_backend():
     while True:
-        print("pie")
+        print(colour(255, 195, 30, "Predefined Lists Backend"))
+        predefined_lists_input = int(input("Press '0' to return to admin menu\nPress '1' to add a new predefined list\nPress '2' to remove a predefined list\n"
+                                           "Press '3' to add items to an existing predefined list\nPress '4' to remove items from an existing predefined list\n"))
+        if predefined_lists_input == 0:
+            admin_menu()
+            break
+        elif predefined_lists_input == 1:
+            new_predefined_list = input("Please enter the name for the new predefined list you are going to create")
+        elif predefined_lists_input == 2:
 
 
 main_menu()
