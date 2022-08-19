@@ -124,7 +124,8 @@ def admin_menu():
 def magic_8_ball_backend():
     while True:
         print(colour(255, 195, 30, "Magic 8 Ball Backend"))
-        magic8_admin_selector = int(input("Press '0' to return to admin menu\nPress '1' to add response to the magic 8 ball\nPress '2' to remove responses from the magic 8 ball\n"))
+        magic8_admin_selector = int(input("Press '0' to return to admin menu\nPress '1' to add response to the magic 8 ball\nPress '2' to remove responses from the magic 8 ball\n"
+                                          "Press '3' to see all responses\n"))
         if magic8_admin_selector == 0:
             admin_menu()
             break
@@ -209,10 +210,15 @@ def magic_8_ball_backend():
                 except:
                     print(colour(210, 4, 35, "Please enter a valid number\n"))
                     time.sleep(0.8)
-
+        elif magic8_admin_selector == 3:
+            num = 0
+            for response in responses:
+                num += 1
+                print("{}. {}".format(num, response))
+            time.sleep(1.5)
         else:
             print(colour(210, 4, 35, "Invalid input"))
-            time.sleep(0.8)
+            time.sleep(0.7)
 
 def predefined_lists_backend():
     while True:
@@ -225,6 +231,6 @@ def predefined_lists_backend():
         elif predefined_lists_input == 1:
             new_predefined_list = input("Please enter the name for the new predefined list you are going to create")
         elif predefined_lists_input == 2:
-
+            print("hi")
 
 main_menu()
