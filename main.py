@@ -1,5 +1,6 @@
 import random
 import time
+import json
 #creating the colour
 def colour(r, g, b, text):
     return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(r,g,b,text)
@@ -223,14 +224,21 @@ def magic_8_ball_backend():
 def predefined_lists_backend():
     while True:
         print(colour(255, 195, 30, "Predefined Lists Backend"))
-        predefined_lists_input = int(input("Press '0' to return to admin menu\nPress '1' to add a new predefined list\nPress '2' to remove a predefined list\n"
+        try:
+            predefined_lists_input = int(input("Press '0' to return to admin menu\nPress '1' to add a new predefined list\nPress '2' to remove a predefined list\n"
                                            "Press '3' to add items to an existing predefined list\nPress '4' to remove items from an existing predefined list\n"))
+        except:
+            print(colour(210, 4, 35, "Invalid value please try again\n"))
+            time.sleep(0.5)
         if predefined_lists_input == 0:
             admin_menu()
             break
         elif predefined_lists_input == 1:
-            new_predefined_list = input("Please enter the name for the new predefined list you are going to create")
+            new_predefined_list = input("Please enter the name for the new predefined list you are going to create\n")
         elif predefined_lists_input == 2:
             print("hi")
 
-main_menu()
+with open('predefined_lists.json', 'r') as f:
+  data = json.load(f)
+
+print(data)
