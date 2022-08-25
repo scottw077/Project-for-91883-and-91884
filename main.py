@@ -55,32 +55,44 @@ def predefined_lists():
     video_games = ["Minecraft", "Terraria", "Fortnite", "GTA", "RDR2", "God of War", "Roblox", "Fall Guys", "LoL", "Valorant",
                    "WoW", "Call of Duty", "Mario-Kart", "Halo", "Cyberpunk 2077", "Wii Sports", "Forza Horizon"]
     while True:
-        print(colour(106, 100, 230, "\nType in the number corresponding to the List you want a random item from"))
-        the_predefined_lists = ("Press '0' to return to main menu\nPress '1' for Fast Food Restaurants\nPress '2' for Streaming Platforms\n"
-                                "Press '3' for Burger Type\nPress '4' for Pizza Type\nPress '5' for a Video game\n") #asks the user what list they would like to use
-        predefined_lists_input = int(input(the_predefined_lists))
+        print(colour(106, 100, 230, "Type in the number corresponding to the List you want a random item from"))
+        print("Press '0' to return to main menu")
+        num = 0
+        with open('predefined_lists_titles.json', 'r') as f:
+            titles = json.load(f)
+            for title in titles:
+                num += 1
+                print("Press '{}' for {}".format(num, title))
+            predefined_lists_input = int(input())
         #prints out a random item from the list they selected
         if predefined_lists_input == 0:
             main_menu()
             break
-        elif predefined_lists_input == 1:
-            print(colour(0, 255, 0, fast_food[random.randint(0, len(fast_food)-1)]))
-            time.sleep(0.5)
-        elif predefined_lists_input == 2:
-            print(colour(0, 255, 0, streaming_platforms[random.randint(0, len(streaming_platforms)-1)]))
-            time.sleep(0.5)
-        elif predefined_lists_input == 3:
-            print(colour(0, 255, 0, burger_type[random.randint(0, len(burger_type)-1)]))
-            time.sleep(0.5)
-        elif predefined_lists_input == 4:
-            print(colour(0, 255, 0, pizza_type[random.randint(0, len(pizza_type)-1)]))
-            time.sleep(0.5)
-        elif predefined_lists_input == 5:
-            print(colour(0, 255, 0, video_games[random.randint(0, len(video_games)-1)]))
-            time.sleep(0.5)
         else:
-            print(colour(210, 4, 35, "That's not a valid option!"))
-            time.sleep(0.8)
+            with open('predefined_lists.json') as dict:
+                predefined_list = json.load(dict)
+                print(predefined_list[predefined_lists_input - 1])
+                print(predefined_list)
+
+elif predefined_lists_input == 1:
+   print(fast_food[random.randint(0, len(fast_food)-1)])
+   time.sleep(0.7)
+elif predefined_lists_input == 2:
+   print(streaming_platforms[random.randint(0, len(streaming_platforms)-1)])
+   time.sleep(0.7)
+elif predefined_lists_input == 3:
+   print(burger_type[random.randint(0, len(burger_type)-1)])
+   time.sleep(0.7)
+elif predefined_lists_input == 4:
+   print(pizza_type[random.randint(0, len(pizza_type)-1)])
+   time.sleep(0.7)
+elif predefined_lists_input == 5:
+   print(video_games[random.randint(0, len(video_games)-1)])
+   time.sleep(0.7)
+else:
+   print(colour(210, 4, 35, "That's not a valid option!"))
+   time.sleep(0.8)
+
 
 
 def admin_login_menu():
@@ -235,13 +247,37 @@ def predefined_lists_backend():
             break
         elif predefined_lists_input == 1:
             new_predefined_list = input("Please enter the name for the new predefined list you are going to create\n")
+
         elif predefined_lists_input == 2:
-            print("hi")
+            with open('predefined_lists.json') as lists:
+                predefined_list = json.load(lists)
+                num = 0
+                for title in predefined_list:
+                    num += 1
+                    print("{}. {}".format(num, list(title.keys())))
+                predefined_list_del = int(input(colour(255, 195, 30, "What predefined list would you like to delete? Please enter the number next to the response\n")))
+                while True:
+                    confirmation = input("Are you sure you want to remove this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
+                    if confirmation == "n":
+                        print(colour(210, 4, 35, "Response has not been removed"))
+                        predefined_lists_backend()
+                        new_response = ""
+                        break
+                    elif confirmation == "y":
+                        del predefined_list[(predefined_list_del - 1)]
+                        with open('predefined_lists.json', 'w') as json_update:
+                            json.dump(predefined_list, json_update)
+                        print("List has been successfully removed")
+                        time.sleep(0.8)
+                        break
+                    else:
+                        print(colour(210, 4, 35, "Invalid input please try again"))
 
-with open('predefined_lists.json') as lists:
-  data = json.load(lists)
-  for x in data:
-    print(list(x.keys()))
 
+
+
+
+
+main_menu()
 
 
