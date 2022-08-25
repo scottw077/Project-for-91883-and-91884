@@ -225,7 +225,7 @@ def predefined_lists_backend():
     while True:
         print(colour(255, 195, 30, "Predefined Lists Backend"))
         try:
-            predefined_lists_input = int(input("Press '0' to return to admin menu\nPress '1' to add a new predefined list\nPress '2' to remove a predefined list\n"
+            predefined_lists_input = int(input("Press '0' to return to admin menu\nPress '1' to create a new predefined list\nPress '2' to remove a predefined list\n"
                                            "Press '3' to add items to an existing predefined list\nPress '4' to remove items from an existing predefined list\n"))
         except:
             print(colour(210, 4, 35, "Invalid value please try again\n"))
@@ -238,7 +238,10 @@ def predefined_lists_backend():
         elif predefined_lists_input == 2:
             print("hi")
 
-with open('predefined_lists.json', 'r') as f:
-  data = json.load(f)
+with open('predefined_lists.json') as lists:
+  data = json.load(lists)
+  for x in data:
+    print(list(x.keys()))
 
-print(data)
+
+
