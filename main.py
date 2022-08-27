@@ -71,10 +71,13 @@ def predefined_lists():
         else:
             dict = open('predefined_lists.json')
             predefined_list = json.load(dict)
-            j = predefined_list[predefined_lists_input-1]
-            print(j[random.randint(1, len(j))])
+            print
+            list_user_wants = list(predefined_list[predefined_lists_input - 1].values())
+            print(list_user_wants)
 
-
+            print(len(predefined_list[predefined_lists_input]))
+            d = random.choice((list_user_wants))
+            print(d)
 
 
 def admin_login_menu():
