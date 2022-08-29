@@ -246,9 +246,22 @@ def predefined_lists_backend():
                     predefined_lists_backend()
                     break
                 elif confirmation == "y":
-                    print("pie")
+                    with open('predefined_lists_titles.json') as titles:
+                        predefined_titles = json.load(titles)
+                        predefined_titles.append(new_predefined_list_title)
+                        with open('predefined_lists_titles.json', 'w') as json_update:
+                            json.dump(predefined_titles, json_update)
+
+                    with open('predefined_lists.json') as lists:
+                        pre_lists = json.load(lists)
+                        pre_lists.append(new_list_responses)
+                        with open('predefined_lists.json', 'w') as json_update:
+                            json.dump(pre_lists, json_update)
+                    print(colour(0, 255, 0, "Successfully created new list!"))
+                    break
                 else:
                     print(colour(210, 4, 35, "Invalid Input! Please try again"))
+
         elif predefined_lists_input == 2:
             with open('predefined_lists_titles.json') as titles:
                 predefined_list_titles = json.load(titles)
