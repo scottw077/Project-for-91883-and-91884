@@ -298,8 +298,44 @@ def predefined_lists_backend():
                     else:
                         print(colour(210, 4, 35, "Invalid input please try again"))
 
+        elif predefined_lists_input == 3:
+            while True:
+                print("Press '0' to return to Predefined Lists Backend")
+                num = 0
+                with open('predefined_lists.json') as lists:
+                    predefined_list = json.load(lists)
 
+                    with open('predefined_lists_titles.json') as titles:
+                        predefined_titles = json.load(titles)
+                        for title in predefined_titles:
+                            num += 1
+                            print("Press '{}' to add responses to {}".format(num, title))
+                        try:
+                            predefined_lists_input = int(input())
+                        except:
+                            print(colour(210, 4, 35, "Invalid Value! Please try again"))
+                            time.sleep(0.7)
+                        if predefined_lists_input == 0:
+                            predefined_lists_backend()
+                            break
+                        elif predefined_lists_input < 0 or predefined_lists_input > len(predefined_titles):
+                            print(colour(210, 4, 35, "Invalid Value! Please try againn"))
+                        else:
+                            break
 
+            while True:
+                with open('predefined_lists.json') as lists:
+                    predefined_lists = json.load(lists)
+                    print("Current Responses: {}".format(predefined_lists[predefined_lists_input - 1]))
+                    time.sleep(0.8)
+                    new_predefined_item = input("What response would you like to add to {}? Press '0' to stop adding responses and return to Predefined Lists Backend\n".format(predefined_titles[predefined_lists_input - 1]))
+                    if new_predefined_item == "0":
+                        predefined_lists_backend()
+                        break
+                    else:
+                        predefined_lists[predefined_lists_input -1].append(new_predefined_item)
+                        with open('predefined_lists.json', 'w') as json_update:
+                            json.dump(predefined_lists, json_update)
 
 
 predefined_lists_backend()
