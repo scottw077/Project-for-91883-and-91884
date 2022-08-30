@@ -5,11 +5,9 @@ import json
 def colour(r, g, b, text):
     return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(r,g,b,text)
 
-
 #the responses for the magic 8 ball
-responses = [colour(210, 4, 35, "My sources say no"), colour(0, 255, 0, "My sources say yes"), colour(255, 140, 0, "I don't know"),
-             colour(255, 140, 0, "Please re-enter question"), colour(0, 255, 0, "Yeah obviously"), colour(210, 4, 35, "Clearly not"),
-             colour(0, 255, 0, "Yeah, I am {} percent sure").format((random.randint(1, 100))), colour(210, 4, 35, "No, I am {} percent sure").format((random.randint(1, 100)))]
+
+
 #main menu
 def main_menu():
     while True:
@@ -33,15 +31,23 @@ def main_menu():
 
 
 def magic_8_ball():
+    with open("magic8ballresponses.json","r") as m:
+            responses = json.load(m)
     while True:
         response1 = responses[random.randint(0, len(responses) -1)] #chooses a random response
+        if response1[1] == 0:
+            response1[0] = colour(0, 255, 0, response1[0])
+        elif response1[1] == 1:
+            response1[0] = colour(210, 4, 35, response1[0])
+        elif response1[1] == 2:
+            response1[0] = colour(255, 140, 0, response1[0])
         print("\nWhat would you like to ask the Magic 8 Ball? Yes/no questions only")
         question = input(colour(255, 49, 49, "Press '0' to return to main menu\n")) #asks the user the question they would like to ask magic 8 ball
         if question == "0":
             main_menu()
             break #returns to menu
         else:
-            print("\nYour question: {}\nMagic 8 Ball's answer: {}".format(colour(0, 193, 255, question), response1)) #prints response
+            print("\nYour question: {}\nMagic 8 Ball's answer: {}".format(colour(0, 193, 255, question), response1[0])) #prints response
             time.sleep(1.4)
 
 
@@ -134,57 +140,19 @@ def magic_8_ball_backend():
             elif new_response_colour == 1:
                 new_response = colour(0, 255, 0, new_response)
                 print(new_response)
-                while True:
-                    confirmation = input("Are you sure you want to add this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
-                    if confirmation == "n":
-                        print(colour(210, 4, 35, "Response has not been added"))
-                        magic_8_ball_backend()
-                        new_response = ""
-                        break
-                        break
-                    elif confirmation == "y":
-                        responses.append(new_response)
-                        print("'{}' has been successfully added to responses".format(new_response))
-                        break
-                    else:
-                        print(colour(210, 4, 35, "Invalid response please try again"))
+                confirmation(new_response, new_response_colour)
 
 
             elif new_response_colour == 2:
                 new_response = colour(210, 4, 35, new_response)
                 print(new_response)
-                while True:
-                    confirmation = input("Are you sure you want to add this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
-                    if confirmation == "n":
-                        print(colour(210, 4, 35, "Response has not been added"))
-                        magic_8_ball_backend()
-                        new_response = ""
-                        break
-                        break
-                    elif confirmation == "y":
-                        responses.append(new_response)
-                        print("'{}' has been successfully added to responses".format(new_response))
-                        break
-                    else:
-                        print(colour(210, 4, 35, "Invalid response please try again"))
+                confirmation(new_response, new_response_colour)
 
             elif new_response_colour == 3:
                 new_response = colour(255, 140, 0, new_response)
                 print(new_response)
-                while True:
-                    confirmation = input("Are you sure you want to add this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
-                    if confirmation == "n":
-                        print(colour(210, 4, 35, "Response has not been added"))
-                        magic_8_ball_backend()
-                        new_response = ""
-                        break
-                        break
-                    elif confirmation == "y":
-                        responses.append(new_response)
-                        print("'{}' has been successfully added to responses".format(new_response))
-                        break
-                    else:
-                        print(colour(210, 4, 35, "Invalid response please try again"))
+                confirmation(new_response, new_response_colour)
+
             else:
                 print(colour(210, 4, 35, "Invalid option please try again"))
 
@@ -369,9 +337,28 @@ def predefined_input_titles(edit):
             else:
                 break
 
+def confirmation(new_response, new_response_colour):
+    while True:
+        confirmation = input("Are you sure you want to add this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
+        if confirmation == "n":
+            print(colour(210, 4, 35, "Response has not been added"))
+            magic_8_ball_backend()
+            new_response = ""
+            break
 
+        elif confirmation == "y":
+            with open("magic8ballresponses.json") as c:
+                responses = json.load(c)
+                new_response_and_colour = new_response + new_response_colour -1
+                responses.append(new_response_and_colour)
+                with open("magic8ballresponses.json", "r") as json_update:
+                    json.dump(responses, json_update)
+            print("'{}' has been successfully added to responses".format(new_response))
+            break
+        else:
+            print(colour(210, 4, 35, "Invalid response please try again"))
 
-main_menu()
+magic_8_ball_backend()
 
 
 
