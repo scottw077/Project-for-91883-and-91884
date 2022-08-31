@@ -138,19 +138,16 @@ def magic_8_ball_backend():
                 break
 
             elif new_response_colour == 1:
-                new_response = colour(0, 255, 0, new_response)
-                print(new_response)
+                print(colour(0, 255, 0, new_response))
                 confirmation(new_response, new_response_colour)
 
 
             elif new_response_colour == 2:
-                new_response = colour(210, 4, 35, new_response)
-                print(new_response)
+                print(colour(210, 4, 35, new_response))
                 confirmation(new_response, new_response_colour)
 
             elif new_response_colour == 3:
-                new_response = colour(255, 140, 0, new_response)
-                print(new_response)
+                print(colour(255, 140, 0, new_response))
                 confirmation(new_response, new_response_colour)
 
             else:
@@ -349,9 +346,9 @@ def confirmation(new_response, new_response_colour):
         elif confirmation == "y":
             with open("magic8ballresponses.json") as c:
                 responses = json.load(c)
-                new_response_and_colour = new_response + new_response_colour -1
-                responses.append(new_response_and_colour)
-                with open("magic8ballresponses.json", "r") as json_update:
+                new_list_response = [new_response, new_response_colour -1]
+                responses.append(new_list_response)
+                with open("magic8ballresponses.json", "w") as json_update:
                     json.dump(responses, json_update)
             print("'{}' has been successfully added to responses".format(new_response))
             break
