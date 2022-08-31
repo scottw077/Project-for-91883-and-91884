@@ -5,23 +5,22 @@ import json
 def colour(r, g, b, text):
     return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(r,g,b,text)
 
-#the responses for the magic 8 ball
-
 
 #main menu
 def main_menu():
     while True:
         print(colour(255, 195, 30, "Type in the number corresponding to the Program you want to run"))
-        menu = int(input("Press '0' to end program\nPress '1' to go to Magic 8 Ball\nPress '2' to go to Random Item from a Predefined List\nPress '3' to open Admin login menu\n")) #asks the user what program they want to run
-        if menu == 0:
+
+        menu = input("Press '0' to end program\nPress '1' to go to Magic 8 Ball\nPress '2' to go to Random Item from a Predefined List\nPress '3' to open Admin login menu\n") #asks the user what program they want to run
+        if menu == "0":
             quit()
-        elif menu == 1:
+        elif menu == "1":
             magic_8_ball()
             break
-        elif menu == 2:
+        elif menu == "2":
             predefined_lists()
             break
-        elif menu == 3:
+        elif menu == "3":
             admin_login_menu()
             break
         else:
@@ -82,16 +81,20 @@ def predefined_lists():
 
 def admin_login_menu():
     while True:
+        with open("admins.json") as o:
+            admins = json.load(o)
+        users = [user[0] for user in admins]
         admin_login_menu_input = input("Please input a username\nPress '0' to return to main menu\n").strip().lower() #username input
         if admin_login_menu_input == "0": #menu return
             main_menu()
             break
-        elif admin_login_menu_input == "scottw":
+        elif admin_login_menu_input in users:
+            position = users.index(admin_login_menu_input)
             admin_pass = input("Please input a password\nPress '0' to return to main menu\n") #password input if username is correct
             if admin_pass == "0": #return to main menu
                 main_menu()
                 break
-            elif admin_pass == "gruiscool123": #if password is correct takes user to admin menu
+            elif admin_pass in admins[position][1]: #if password is correct takes user to admin menu
                 print(colour(0, 255, 0, "Successfully signed in"))
                 admin_menu()
                 break
@@ -155,13 +158,17 @@ def magic_8_ball_backend():
 
         elif magic8_admin_selector == 2:
             while True:
+                with open("magic8ballresponses.json") as k:
+                    responses = json.load(k)
                 num = 0
                 for response in responses:
                     num += 1
-                    print("{}. {}".format(num, response))
+                    print("Press '{}' to remove {}".format(num, response[0]))
                 try:
                     response_del = int(input("What response would you like to delete? Please enter the number next to the response\n"))
                     del responses[(response_del-1)]
+                    with open("magic8ballresponses.json", "w") as json_update:
+                        json.dump(responses, json_update)
                     print(colour(210, 4, 35, "Response successfully removed"))
                     break
                 except:
@@ -169,10 +176,17 @@ def magic_8_ball_backend():
                     time.sleep(0.8)
         elif magic8_admin_selector == 3:
             num = 0
+            with open("magic8ballresponses.json") as o:
+                responses = json.load(o)
             for response in responses:
                 num += 1
-                print("{}. {}".format(num, response))
-            time.sleep(1.5)
+                print("{}. {}".format(num, response[0]))
+            response_colour = [response[1] for response in responses]
+
+            print("Number of {} responses: {}".format(colour(0, 255, 0, "yes"), response_colour.count(0)))
+            print("Number of {} responses: {}".format(colour(210, 4, 35, "no"), response_colour.count(1)))
+            print("Number of {} responses {}".format(colour(255, 140, 0, "don't know"), response_colour.count(2)))
+            time.sleep(2.4)
         else:
             print(colour(210, 4, 35, "Invalid input"))
             time.sleep(0.7)
@@ -355,7 +369,8 @@ def confirmation(new_response, new_response_colour):
         else:
             print(colour(210, 4, 35, "Invalid response please try again"))
 
-magic_8_ball_backend()
+
+main_menu()
 
 
 
