@@ -109,7 +109,7 @@ def admin_login_menu():
 def admin_menu():
     while True:
         print(colour(255, 195, 30, "\nWelcome to The Admin Menu"))
-        admin_menu_selector = int(input("Press '0' to return to main menu\nPress '1' to open Magic 8 Ball backend\nPress '2' to open Predefined lists backend\n"))
+        admin_menu_selector = int(input("Press '0' to return to main menu\nPress '1' to open Magic 8 Ball backend\nPress '2' to open Predefined lists backend\nPress '3' to add/remove admins\n"))
         if admin_menu_selector == 0:
             main_menu()
             break
@@ -119,8 +119,58 @@ def admin_menu():
         elif admin_menu_selector == 2:
             predefined_lists_backend()
             break
+        elif admin_menu_selector == 3:
+            admin_backend()
+            break
         else:
             print(colour(210, 4, 35, "That's not a valid option!"))
+
+
+def admin_backend():
+    while True:
+        print(colour(255, 195, 30, "Welcome to the Admin Backend"))
+        admin_backend_selector = int(input("Press '0' to return to admin menu\nPress '1' to add a new admin\nPress '2' to remove an admin\nPress '3' to see all admins and their passwords\n"))
+        if admin_backend_selector == 0:
+            admin_menu()
+        elif admin_backend_selector == 1:
+            new_admin_user = input("Please create a username for the new admin\n")
+            with open("admins.json") as j:
+                admins = json.load(j)
+                existing_users = [existing_user[0] for existing_user in admins]
+                if new_admin_user in existing_users:
+                    print(colour(210, 4, 35, "Username already exists!"))
+                else:
+                    new_admin_pass = input("Please create a password for the new admin\n")
+                    print("Username: " + new_admin_user)
+                    print("Password: " + new_admin_pass)
+                    confirmation = input("Are you sure you want to add this admin? Press 'y' for yes and 'n' for no\n")
+                    if confirmation == "n":
+                        admin_backend()
+                        break
+                    elif confirmation == "y":
+                        new_admin_user_pass = [new_admin_user, new_admin_pass]
+                        admins.append(new_admin_user_pass)
+                        with open("admins.json", "w") as json_update:
+                            json.dump(admins, json_update)
+                        print(colour(0, 255, 0, "Admin has been added"))
+                    else:
+                        print(colour(210, 4, 35, "Invalid value! Please try again"))
+        elif admin_backend_selector == 2:
+            with open("admins.json") as u:
+                admins = json.load(u)
+                usernames = [username[0] for username in admins]
+                num = 1
+                for username in usernames:
+                    print("Press '{}' to remove {} as admin".format(num, username))
+                    num += 1
+                admin_remove_input = int(input())
+                try:
+                    del admins[admin_remove_input - 1]
+                    with open("admins.json", "w") as json_update:
+                        json.dump(admins, json_update)
+                    print(colour(0, 255, 0, "Successfully removed admin"))
+                except:
+                    print(colour(210, 4, 35, "Please enter a valid number!"))
 
 def magic_8_ball_backend():
     while True:
@@ -370,7 +420,7 @@ def confirmation(new_response, new_response_colour):
             print(colour(210, 4, 35, "Invalid response please try again"))
 
 
-main_menu()
+admin_backend()
 
 
 
