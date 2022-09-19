@@ -130,8 +130,12 @@ def admin_backend():
     while True:
         print(colour(255, 195, 30, "Welcome to the Admin Backend"))
         admin_backend_selector = int(input("Press '0' to return to admin menu\nPress '1' to add a new admin\nPress '2' to remove an admin\nPress '3' to see all admins and their passwords\n"))
+
+
         if admin_backend_selector == 0:
             admin_menu()
+
+
         elif admin_backend_selector == 1:
             new_admin_user = input("Please create a username for the new admin\n")
             with open("admins.json") as j:
@@ -143,7 +147,7 @@ def admin_backend():
                     new_admin_pass = input("Please create a password for the new admin\n")
                     print("Username: " + new_admin_user)
                     print("Password: " + new_admin_pass)
-                    confirmation = input("Are you sure you want to add this admin? Press 'y' for yes and 'n' for no\n")
+                    confirmation = input("Are you sure you want to add this admin? {} and {}\n".format(colour(0, 255, 0, "Press 'y' for yes"),colour(210, 4, 35, "press 'n' for no")))
                     if confirmation == "n":
                         admin_backend()
                         break
@@ -155,22 +159,43 @@ def admin_backend():
                         print(colour(0, 255, 0, "Admin has been added"))
                     else:
                         print(colour(210, 4, 35, "Invalid value! Please try again"))
+
+
         elif admin_backend_selector == 2:
             with open("admins.json") as u:
                 admins = json.load(u)
                 usernames = [username[0] for username in admins]
-                num = 1
-                for username in usernames:
-                    print("Press '{}' to remove {} as admin".format(num, username))
-                    num += 1
-                admin_remove_input = int(input())
+                def admin_usernames():
+                    num = 1
+                    print("Press '0' to return to {}".format(colour(255, 195, 30, "admin backend")))
+                    for username in usernames:
+                        print("Press '{}' to remove {} as admin".format(num, colour(255, 195, 30, username)))
+                        num += 1
                 try:
+                    admin_usernames()
+                    admin_remove_input = int(input())
+                    if admin_remove_input == 0:
+                        admin_backend()
+                    while admin_remove_input < 0 or admin_remove_input > len(admins):
+                        print(colour(210, 4, 35, "Invalid value entered! Please try again"))
+                        time.sleep(0.8)
+                        admin_usernames()
+                        admin_remove_input = int(input())
                     del admins[admin_remove_input - 1]
                     with open("admins.json", "w") as json_update:
                         json.dump(admins, json_update)
                     print(colour(0, 255, 0, "Successfully removed admin"))
                 except:
                     print(colour(210, 4, 35, "Please enter a valid number!"))
+        elif admin_backend_selector == 3:
+            with open("admins.json") as b:
+                admins = json.load(b)
+                for admin_user, admin_pass in admins:
+                    print("Username: {}\nPassword: {}\n".format(admin_user, admin_pass))
+                print("Total number of admins: {}".format(len(admins)))
+                time.sleep(1)
+
+
 
 def magic_8_ball_backend():
     while True:
