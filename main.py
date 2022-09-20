@@ -10,10 +10,10 @@ def colour(r, g, b, text):
 def main_menu():
     while True:
         print(colour(255, 195, 30, "Type in the number corresponding to the Program you want to run"))
-
         menu = input("Press '0' to end program\nPress '1' to go to Magic 8 Ball\nPress '2' to go to Random Item from a Predefined List\nPress '3' to open Admin login menu\n") #asks the user what program they want to run
         if menu == "0":
             quit()
+            break
         elif menu == "1":
             magic_8_ball()
             break
@@ -66,7 +66,9 @@ def predefined_lists():
         if predefined_lists_input == 0:
             main_menu()
             break
-
+        elif predefined_lists_input < 0:
+            print(colour(210, 4, 35, "Please do not input negative numbers!"))
+            time.sleep(0.5)
         else:
             try:
                 dict = open('predefined_lists.json')
@@ -439,13 +441,13 @@ def confirmation(new_response, new_response_colour):
                 responses.append(new_list_response)
                 with open("magic8ballresponses.json", "w") as json_update:
                     json.dump(responses, json_update)
-            print("'{}' has been successfully added to responses".format(new_response))
+            print(colour(0, 255, 0, "'{}' has been successfully added to responses".format(new_response)))
             break
         else:
             print(colour(210, 4, 35, "Invalid response please try again"))
 
 
-admin_backend()
+main_menu()
 
 
 
