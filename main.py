@@ -212,26 +212,28 @@ def magic_8_ball_backend():
             new_response = input("Please type the response you want to add\n")
             new_response_colour = int(input("Press '0' to return to admin menu\nPress '1' to add the colour {} to new response\n"
                                             "Press '2' to add the colour {} to new response\nPress '3' to add the colour {} to new response\n".format(colour(0, 255, 0, "green"), colour(210, 4, 35, "red"), colour(255, 140, 0, "orange"))))
-
             if new_response_colour == 0:
                 admin_menu()
                 break
 
             elif new_response_colour == 1:
-                print(colour(0, 255, 0, new_response))
-                confirmation(new_response, new_response_colour)
+                new_resp_with_colour = colour(0, 255, 0, new_response)
+                print(new_resp_with_colour)
+                confirmation(new_response, new_response_colour, new_resp_with_colour)
 
 
             elif new_response_colour == 2:
-                print(colour(210, 4, 35, new_response))
-                confirmation(new_response, new_response_colour)
+                new_resp_with_colour = colour(210, 4, 35, new_response)
+                print(new_resp_with_colour)
+                confirmation(new_response, new_response_colour, new_resp_with_colour)
 
             elif new_response_colour == 3:
-                print(colour(255, 140, 0, new_response))
-                confirmation(new_response, new_response_colour)
-
+                new_resp_with_colour = colour(255, 140, 0, new_response)
+                print(new_resp_with_colour)
+                confirmation(new_response, new_response_colour, new_resp_with_colour)
             else:
                 print(colour(210, 4, 35, "Invalid option please try again"))
+
 
         elif magic8_admin_selector == 2:
             while True:
@@ -251,6 +253,8 @@ def magic_8_ball_backend():
                 except:
                     print(colour(210, 4, 35, "Please enter a valid number\n"))
                     time.sleep(0.8)
+
+
         elif magic8_admin_selector == 3:
             num = 0
             with open("magic8ballresponses.json") as o:
@@ -262,8 +266,8 @@ def magic_8_ball_backend():
 
             print("Number of {} responses: {}".format(colour(0, 255, 0, "yes"), response_colour.count(0)))
             print("Number of {} responses: {}".format(colour(210, 4, 35, "no"), response_colour.count(1)))
-            print("Number of {} responses {}".format(colour(255, 140, 0, "don't know"), response_colour.count(2)))
-            time.sleep(2.4)
+            print("Number of {} responses: {}".format(colour(255, 140, 0, "don't know"), response_colour.count(2)))
+            time.sleep(2.7)
         else:
             print(colour(210, 4, 35, "Invalid input"))
             time.sleep(0.7)
@@ -425,7 +429,7 @@ def predefined_input_titles(edit):
             else:
                 break
 
-def confirmation(new_response, new_response_colour):
+def confirmation(new_response, new_response_colour, new_resp_with_colour):
     while True:
         confirmation = input("Are you sure you want to add this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
         if confirmation == "n":
@@ -441,7 +445,7 @@ def confirmation(new_response, new_response_colour):
                 responses.append(new_list_response)
                 with open("magic8ballresponses.json", "w") as json_update:
                     json.dump(responses, json_update)
-            print(colour(0, 255, 0, "'{}' has been successfully added to responses".format(new_response)))
+            print("'{}' has been successfully added to responses".format(new_resp_with_colour))
             break
         else:
             print(colour(210, 4, 35, "Invalid response please try again"))
