@@ -7,7 +7,7 @@ def colour(r, g, b, text):
 
 
 #main menu
-def main_menu():
+def main_menu(): #this is the main menu/hub of the code and this code connects all the programs together
     while True:
         print(colour(255, 195, 30, "Type in the number corresponding to the Program you want to run"))
         menu = input("Press '0' to end program\nPress '1' to go to Magic 8 Ball\nPress '2' to go to Random Item from a Predefined List\nPress '3' to open Admin login menu\n") #asks the user what program they want to run
@@ -33,7 +33,7 @@ def magic_8_ball():
     with open("magic8ballresponses.json","r") as m:
             responses = json.load(m)
     while True:
-        response1 = responses[random.randint(0, len(responses) -1)] #chooses a random response
+        response1 = responses[random.randint(0, len(responses) -1)] #randomly gets a response
         if response1[1] == 0:
             response1[0] = colour(0, 255, 0, response1[0])
         elif response1[1] == 1:
@@ -62,13 +62,15 @@ def predefined_lists():
                 print("Press '{}' for {}".format(num, title))
             predefined_lists_input = int(input())
 
-        #prints out a random item from the list they selected
+        #redirecting the user to the main menu
         if predefined_lists_input == 0:
             main_menu()
             break
+        #prompting the user that you cannot input negative numbers
         elif predefined_lists_input < 0:
             print(colour(210, 4, 35, "Please do not input negative numbers!"))
             time.sleep(0.5)
+        # prints out a random item from the list they selected
         else:
             try:
                 dict = open('predefined_lists.json')
@@ -81,34 +83,36 @@ def predefined_lists():
                 time.sleep(1.2)
 
 
+# this allows users to access the admin menu
 def admin_login_menu():
     while True:
-        with open("admins.json") as o:
+        with open("admins.json") as o: #getting the current admins and their passwords
             admins = json.load(o)
-        users = [user[0] for user in admins]
-        admin_login_menu_input = input("Please input a username\nPress '0' to return to main menu\n").strip().lower() #username input
-        if admin_login_menu_input == "0": #menu return
+        users = [user[0] for user in admins] #making only the users into one variable
+        admin_login_menu_input = input("Please input a username\nPress '0' to return to main menu\n").strip().lower() #asks the user for the username
+        if admin_login_menu_input == "0": #returns the user to the main menu
             main_menu()
             break
-        elif admin_login_menu_input in users:
-            position = users.index(admin_login_menu_input)
-            admin_pass = input("Please input a password\nPress '0' to return to main menu\n") #password input if username is correct
-            if admin_pass == "0": #return to main menu
+        elif admin_login_menu_input in users: # if the username is correct asks the user for the password
+            position = users.index(admin_login_menu_input) # gets the position of the admin in order to check if it's their password and not another admin's
+            admin_pass = input("Please input a password\nPress '0' to return to main menu\n")
+            if admin_pass == "0":
                 main_menu()
                 break
-            elif admin_pass in admins[position][1]: #if password is correct takes user to admin menu
+            elif admin_pass in admins[position][1]:
                 print(colour(0, 255, 0, "Successfully signed in"))
                 admin_menu()
                 break
             else:
-                print(colour(210, 4, 35, "Wrong password please try again")) #tells the user the password is incorrect
+                print(colour(210, 4, 35, "Wrong password please try again")) #tells the user that the password they entered is incorrect
                 time.sleep(1)
         else:
-            print(colour(210, 4, 35, "Wrong username please try again")) #tells the user the username is incorrect
+            print(colour(210, 4, 35, "Wrong/invalid username please try again")) #tells the user that the username is incorrect/invalid
             time.sleep(1)
 
 
 def admin_menu():
+    # this is the hub of all the admin programs which connects it all together
     while True:
         print(colour(255, 195, 30, "\nWelcome to The Admin Menu"))
         admin_menu_selector = int(input("Press '0' to return to main menu\nPress '1' to open Magic 8 Ball backend\nPress '2' to open Predefined lists backend\nPress '3' to add/remove admins\n"))
@@ -130,7 +134,7 @@ def admin_menu():
 
 def admin_backend():
     while True:
-        print(colour(255, 195, 30, "Welcome to the Admin Backend"))
+        print(colour(255, 195, 30, "Welcome to the Admin Backend")) # asks the user what they would like to do in the admin backend
         admin_backend_selector = int(input("Press '0' to return to admin menu\nPress '1' to add a new admin\nPress '2' to remove an admin\nPress '3' to see all admins and their passwords\n"))
 
 
@@ -149,18 +153,7 @@ def admin_backend():
                     new_admin_pass = input("Please create a password for the new admin\n")
                     print("Username: " + new_admin_user)
                     print("Password: " + new_admin_pass)
-                    confirmation = input("Are you sure you want to add this admin? {} and {}\n".format(colour(0, 255, 0, "Press 'y' for yes"),colour(210, 4, 35, "press 'n' for no")))
-                    if confirmation == "n":
-                        admin_backend()
-                        break
-                    elif confirmation == "y":
-                        new_admin_user_pass = [new_admin_user, new_admin_pass]
-                        admins.append(new_admin_user_pass)
-                        with open("admins.json", "w") as json_update:
-                            json.dump(admins, json_update)
-                        print(colour(0, 255, 0, "Admin has been added"))
-                    else:
-                        print(colour(210, 4, 35, "Invalid value! Please try again"))
+                    confirmation(new_admin_user, 0, new_admin_pass, "admin", "add")
 
 
         elif admin_backend_selector == 2:
@@ -189,6 +182,8 @@ def admin_backend():
                     print(colour(0, 255, 0, "Successfully removed admin"))
                 except:
                     print(colour(210, 4, 35, "Please enter a valid number!"))
+
+
         elif admin_backend_selector == 3:
             with open("admins.json") as b:
                 admins = json.load(b)
@@ -219,18 +214,18 @@ def magic_8_ball_backend():
             elif new_response_colour == 1:
                 new_resp_with_colour = colour(0, 255, 0, new_response)
                 print(new_resp_with_colour)
-                confirmation(new_response, new_response_colour, new_resp_with_colour)
+                confirmation(new_response, new_response_colour, new_resp_with_colour, "magic8ball", "add")
 
 
             elif new_response_colour == 2:
                 new_resp_with_colour = colour(210, 4, 35, new_response)
                 print(new_resp_with_colour)
-                confirmation(new_response, new_response_colour, new_resp_with_colour)
+                confirmation(new_response, new_response_colour, new_resp_with_colour, "magic8ball", "add")
 
             elif new_response_colour == 3:
                 new_resp_with_colour = colour(255, 140, 0, new_response)
                 print(new_resp_with_colour)
-                confirmation(new_response, new_response_colour, new_resp_with_colour)
+                confirmation(new_response, new_response_colour, new_resp_with_colour, "magic8ball", "add")
             else:
                 print(colour(210, 4, 35, "Invalid option please try again"))
 
@@ -298,29 +293,9 @@ def predefined_lists_backend():
                     print(new_list_responses)
                     print(colour(0, 255, 0, "Added\n"))
 
-            while True:
-                print(new_predefined_list_title)
-                print(new_list_responses)
-                confirmation = input("Are you sure you want to add this list?\nPress 'y' for yes and 'n' for no\n").strip().lower()
-                if confirmation == "n":
-                    predefined_lists_backend()
-                    break
-                elif confirmation == "y":
-                    with open('predefined_lists_titles.json') as titles:
-                        predefined_titles = json.load(titles)
-                        predefined_titles.append(new_predefined_list_title)
-                        with open('predefined_lists_titles.json', 'w') as json_update:
-                            json.dump(predefined_titles, json_update)
-
-                    with open('predefined_lists.json') as lists:
-                        pre_lists = json.load(lists)
-                        pre_lists.append(new_list_responses)
-                        with open('predefined_lists.json', 'w') as json_update:
-                            json.dump(pre_lists, json_update)
-                    print(colour(0, 255, 0, "Successfully created new list!"))
-                    break
-                else:
-                    print(colour(210, 4, 35, "Invalid Input! Please try again"))
+            print(new_predefined_list_title)
+            print(new_list_responses)
+            confirmation(new_list_responses, 0, new_predefined_list_title, "predeflists", "add")
 
         elif predefined_lists_input == 2:
             with open('predefined_lists_titles.json') as titles:
@@ -332,31 +307,10 @@ def predefined_lists_backend():
 
                 for title in predefined_list_titles:
                     num += 1
-                    print("Press '{}' to remove the list {}".format(num, title))
+                    print("Press '{}' to remove the list '{}'".format(num, title))
                 predefined_list_del = int(input(colour(255, 195, 30, "What predefined list would you like to delete? Please enter the number next to the response\n")))
 
-                while True:
-                    confirmation = input("Are you sure you want to remove this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
-                    if confirmation == "n":
-                        print(colour(210, 4, 35, "Response has not been removed"))
-                        predefined_lists_backend()
-                        new_response = ""
-                        break
-
-                    elif confirmation == "y":
-                        del predefined_list[(predefined_list_del - 1)]
-                        del predefined_list_titles[(predefined_list_del - 1)]
-                        with open('predefined_lists.json', 'w') as json_update:
-                            json.dump(predefined_list, json_update)
-
-                        with open('predefined_lists_titles.json', 'w') as json_update:
-                            json.dump(predefined_list_titles, json_update)
-                        print("List has been successfully removed")
-                        time.sleep(0.8)
-                        break
-
-                    else:
-                        print(colour(210, 4, 35, "Invalid input please try again"))
+                confirmation(predefined_list, predefined_list_del, predefined_list_titles, "predeflists", "remove")
 
         elif predefined_lists_input == 3:
             predefined_input_titles("add")
@@ -429,24 +383,80 @@ def predefined_input_titles(edit):
             else:
                 break
 
-def confirmation(new_response, new_response_colour, new_resp_with_colour):
+def confirmation(main_value, number_value, other_value, program, edit):
     while True:
-        confirmation = input("Are you sure you want to add this?\nPress 'y' for yes\nPress 'n' for no\n").strip().lower()
+        confirmation = input("Are you sure you want to {} this?\nPress 'y' for yes\nPress 'n' for no\n".format(edit)).strip().lower()
         if confirmation == "n":
-            print(colour(210, 4, 35, "Response has not been added"))
-            magic_8_ball_backend()
-            new_response = ""
-            break
+            if program == "magic8ball":
+                print(colour(210, 4, 35, "Response has not been added"))
+                magic_8_ball_backend()
+                new_response = ""
+                break
+            elif program == "predeflists":
+                if edit == "remove":
+                    print(210, 4, 35, "Response has not been removed")
+                    predefined_lists_backend()
+                    break
+                else:
+                    print(colour(210, 4, 35, "Response has not been added"))
+                    predefined_lists_backend()
+                    break
+
+            elif program == "admin":
+                admin_backend()
+                break
+
+
 
         elif confirmation == "y":
-            with open("magic8ballresponses.json") as c:
-                responses = json.load(c)
-                new_list_response = [new_response, new_response_colour -1]
-                responses.append(new_list_response)
-                with open("magic8ballresponses.json", "w") as json_update:
-                    json.dump(responses, json_update)
-            print("'{}' has been successfully added to responses".format(new_resp_with_colour))
-            break
+            if program == "magic8ball":
+                with open("magic8ballresponses.json") as c:
+                    responses = json.load(c)
+                    new_list_response = [main_value, number_value -1]
+                    responses.append(new_list_response)
+                    with open("magic8ballresponses.json", "w") as json_update:
+                        json.dump(responses, json_update)
+                print("'{}' has been successfully added to responses".format(other_value))
+                break
+
+            elif program == "predeflists" and edit == "remove":
+                del main_value[(number_value - 1)]
+                del other_value[(number_value - 1)]
+                with open('predefined_lists.json', 'w') as json_update:
+                    json.dump(main_value, json_update)
+
+                with open('predefined_lists_titles.json', 'w') as json_update:
+                    json.dump(other_value, json_update)
+                print("List has been successfully removed")
+                time.sleep(0.8)
+                break
+
+            elif program == "predeflists" and edit == "add":
+                with open('predefined_lists_titles.json') as titles:
+                    predefined_titles = json.load(titles)
+                    predefined_titles.append(other_value)
+                    with open('predefined_lists_titles.json', 'w') as json_update:
+                        json.dump(predefined_titles, json_update)
+
+                with open('predefined_lists.json') as lists:
+                    pre_lists = json.load(lists)
+                    pre_lists.append(main_value)
+                    with open('predefined_lists.json', 'w') as json_update:
+                        json.dump(pre_lists, json_update)
+                print(colour(0, 255, 0, "Successfully created new list!"))
+                break
+
+
+            elif program == "admin":
+                with open("admins.json") as i:
+                    admins = json.load(i)
+                new_admin_user_pass = [main_value, other_value]
+                admins.append(new_admin_user_pass)
+                with open("admins.json", "w") as json_update:
+                    json.dump(admins, json_update)
+                print(colour(0, 255, 0, "Admin has been added"))
+                break
+
         else:
             print(colour(210, 4, 35, "Invalid response please try again"))
 
