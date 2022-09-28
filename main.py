@@ -46,7 +46,7 @@ def magic_8_ball():
             main_menu()
             break #returns to menu
         else:
-            print("\nYour question: {}\nMagic 8 Ball's answer: {}".format(colour(0, 193, 255, question), response1[0])) #prints response
+            print("\nYour question: {}\nMagic 8 Ball's answer: {}".format(question, response1[0])) #prints response
             time.sleep(1.4)
 
 
@@ -362,13 +362,13 @@ def predefined_lists_backend():
 def predefined_input_titles(edit):
     global predefined_list_input
     while True:
-        print("Press '0' to return to Predefined Lists Backend")
+        print("Press '0' to return to {}".format(colour(210, 195, 30, "Predefined Lists Backend")))
         num = 0
         with open('predefined_lists_titles.json') as titles:
             predefined_titles = json.load(titles)
             for title in predefined_titles:
                 num += 1
-                print("Press '{}' to {} responses of {}".format(num, edit, title))
+                print("Press '{}' to {} responses from {}".format(num, edit, colour(210, 195, 30, title)))
             try:
                 predefined_list_input = int(input())
                 predefined_list_input -= 1
@@ -405,8 +405,6 @@ def confirmation(main_value, number_value, other_value, program, edit):
             elif program == "admin":
                 admin_backend()
                 break
-
-
 
         elif confirmation == "y":
             if program == "magic8ball":
