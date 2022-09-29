@@ -387,7 +387,7 @@ def predefined_input_titles(edit):
                 break
 
 
-def confirmation(main_value, number_value, other_value, program, edit):
+def confirmation(program, edit):
     while True:
         confirmation = input("Are you sure you want to {} this?\nPress 'y' for yes\nPress 'n' for no\n".format(edit)).strip().lower()
         if confirmation == "n":
@@ -411,54 +411,7 @@ def confirmation(main_value, number_value, other_value, program, edit):
                 break
 
         elif confirmation == "y":
-            if program == "magic8ball":
-                with open("magic8ballresponses.json") as c:
-                    responses = json.load(c)
-                    new_list_response = [main_value, number_value -1]
-                    responses.append(new_list_response)
-                    with open("magic8ballresponses.json", "w") as json_update:
-                        json.dump(responses, json_update)
-                print("'{}' has been successfully added to responses".format(other_value))
-                break
-
-            elif program == "predeflists" and edit == "remove":
-                del main_value[(number_value - 1)]
-                del other_value[(number_value - 1)]
-                with open('predefined_lists.json', 'w') as json_update:
-                    json.dump(main_value, json_update)
-
-                with open('predefined_lists_titles.json', 'w') as json_update:
-                    json.dump(other_value, json_update)
-                print("List has been successfully removed")
-                time.sleep(0.8)
-                break
-
-            elif program == "predeflists" and edit == "add":
-                with open('predefined_lists_titles.json') as titles:
-                    predefined_titles = json.load(titles)
-                    predefined_titles.append(other_value)
-                    with open('predefined_lists_titles.json', 'w') as json_update:
-                        json.dump(predefined_titles, json_update)
-
-                with open('predefined_lists.json') as lists:
-                    pre_lists = json.load(lists)
-                    pre_lists.append(main_value)
-                    with open('predefined_lists.json', 'w') as json_update:
-                        json.dump(pre_lists, json_update)
-                print(colour(0, 255, 0, "Successfully created new list!"))
-                break
-
-
-            elif program == "admin":
-                with open("admins.json") as i:
-                    admins = json.load(i)
-                new_admin_user_pass = [main_value, other_value]
-                admins.append(new_admin_user_pass)
-                with open("admins.json", "w") as json_update:
-                    json.dump(admins, json_update)
-                print(colour(0, 255, 0, "Admin has been added"))
-                break
-
+            break
         else:
             print(colour(210, 4, 35, "Invalid response please try again"))
 
