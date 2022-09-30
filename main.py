@@ -508,7 +508,6 @@ def confirmation(program, edit):
         else:
             print(colour(210, 4, 35, "Invalid response please try again"))
 
-
 main_menu()
 
 
