@@ -149,7 +149,16 @@ def admin_backend():
                     new_admin_pass = input("Please create a password for the new admin\n")
                     print("Username: " + new_admin_user)
                     print("Password: " + new_admin_pass)
-                    confirmation(new_admin_user, 0, new_admin_pass, "admin", "add") # sends the user to the confirmation function
+                    confirmation("admin", "add") # sends the user to the confirmation function
+                    with open("admins.json") as i: # opens the admin json
+                        admins = json.load(i)
+
+                    new_admin_user_pass = [new_admin_user, new_admin_pass] # combines the pass and user into one list
+                    admins.append(new_admin_user_pass) # adds it to the existing list
+
+                    with open("admins.json", "w") as json_update: # writes it back to the json file
+                        json.dump(admins, json_update)
+                    print(colour(0, 255, 0, "Admin has been added"))
 
 
         elif admin_backend_selector == 2:
@@ -167,11 +176,12 @@ def admin_backend():
                     admin_remove_input = int(input())
                     if admin_remove_input == 0:
                         admin_backend()
-                    while admin_remove_input < 0 or admin_remove_input > len(admins): # checks if number is invalud
+                    while admin_remove_input < 0 or admin_remove_input > len(admins): # checks if number is invalid
                         print(colour(210, 4, 35, "Invalid value entered! Please try again"))
                         time.sleep(0.8)
                         admin_usernames()
                         admin_remove_input = int(input())
+                    confirmation("admin", "remove")
                     del admins[admin_remove_input - 1] # deletes the admin and their password from the json
                     with open("admins.json", "w") as json_update:
                         json.dump(admins, json_update)
@@ -207,20 +217,23 @@ def magic_8_ball_backend():
                 break
 
             elif new_response_colour == 1: # makes the response the colour the admin chooses and sends it to the confirmation code
-                new_resp_with_colour = colour(0, 255, 0, new_response)
+                new_resp_with_colour = colour(0, 255, 0, new_response) # makes the response the colour the admin chose
                 print(new_resp_with_colour)
-                confirmation(new_response, new_response_colour, new_resp_with_colour, "magic8ball", "add")
-
+                confirmation("magic8ball", "add") # sends it to confirmation function
+                new_magic8ball_response(new_response, new_response_colour, new_resp_with_colour) # sends it to create the new response
 
             elif new_response_colour == 2:
                 new_resp_with_colour = colour(210, 4, 35, new_response)
                 print(new_resp_with_colour)
-                confirmation(new_response, new_response_colour, new_resp_with_colour, "magic8ball", "add")
+                confirmation("magic8ball", "add")
+                new_magic8ball_response(new_response, new_response_colour, new_resp_with_colour)
 
             elif new_response_colour == 3:
                 new_resp_with_colour = colour(255, 140, 0, new_response)
                 print(new_resp_with_colour)
-                confirmation(new_response, new_response_colour, new_resp_with_colour, "magic8ball", "add")
+                confirmation("magic8ball", "add")
+                new_magic8ball_response(new_response, new_response_colour, new_resp_with_colour)
+
             else:
                 print(colour(210, 4, 35, "Invalid option please try again"))
 
@@ -232,7 +245,7 @@ def magic_8_ball_backend():
                 num = 0
                 for response in responses: # prints out all the current responses
                     num += 1
-                    print("Press '{}' to remove {}".format(num, response[0]))
+                    print("Press '{}' to remove '{}'".format(num, response[0]))
                 try: # deletes the response the user chooses then writes it back to the json file
                     response_del = int(input("What response would you like to delete? Please enter the number next to the response\n"))
                     del responses[(response_del-1)]
@@ -261,6 +274,15 @@ def magic_8_ball_backend():
         else:
             print(colour(210, 4, 35, "Invalid input"))
             time.sleep(0.7)
+
+def new_magic8ball_response(new_response, new_response_colour, new_resp_with_colour):
+    with open("magic8ballresponses.json") as c: # opens magic 8 ball responses json file
+        responses = json.load(c)
+        new_list_response = [new_response, new_response_colour - 1] # adds the colour number and response into one list
+        responses.append(new_list_response) # adds to the responses variable
+        with open("magic8ballresponses.json", "w") as json_update: # writes the response back to the json file
+            json.dump(responses, json_update)
+    print("'{}' has been successfully added to responses".format(new_resp_with_colour))
 
 
 def predefined_lists_backend():
@@ -292,7 +314,20 @@ def predefined_lists_backend():
 
             print(new_predefined_list_title)
             print(new_list_responses)
-            confirmation(new_list_responses, 0, new_predefined_list_title, "predeflists", "add")
+            confirmation("predeflists", "add") # sends it to confirmation function
+            with open('predefined_lists_titles.json') as titles:
+                predefined_titles = json.load(titles) # loads up predefined titles json file
+                predefined_titles.append(new_predefined_list_title) # adds the title to the json file
+                with open('predefined_lists_titles.json', 'w') as json_update: # writes it back to the json file
+                    json.dump(predefined_titles, json_update)
+
+            with open('predefined_lists.json') as lists: #loads up predefined list json file
+                pre_lists = json.load(lists)
+                pre_lists.append(new_list_responses) # adds the new list's items to the json file
+                with open('predefined_lists.json', 'w') as json_update: # writes it back to the json file
+                    json.dump(pre_lists, json_update)
+            print(colour(0, 255, 0, "Successfully created new list!"))
+
 
         elif predefined_lists_input == 2:
             with open('predefined_lists_titles.json') as titles: # accessing the current titles and their items
@@ -307,7 +342,16 @@ def predefined_lists_backend():
                     print("Press '{}' to remove the list '{}'".format(num, title))
                 predefined_list_del = int(input(colour(255, 195, 30, "What predefined list would you like to delete? Please enter the number next to the response\n")))
 
-                confirmation(predefined_list, predefined_list_del, predefined_list_titles, "predeflists", "remove")
+                confirmation("predeflists", "remove")
+                del predefined_list[(predefined_list_del - 1)]
+                del predefined_list_titles[(predefined_list_del - 1)]
+                with open('predefined_lists.json', 'w') as json_update:
+                    json.dump(predefined_list, json_update)
+
+                with open('predefined_lists_titles.json', 'w') as json_update:
+                    json.dump(predefined_list_titles, json_update)
+                print("List has been successfully removed")
+                time.sleep(0.8)
 
         elif predefined_lists_input == 3:
             predefined_input_titles("add") # asks the admin what title they would like to add items to
@@ -386,15 +430,13 @@ def predefined_input_titles(edit):
             else:
                 break
 
-
 def confirmation(program, edit):
     while True:
-        confirmation = input("Are you sure you want to {} this?\nPress 'y' for yes\nPress 'n' for no\n".format(edit)).strip().lower()
-        if confirmation == "n":
+        confirmation = input("Are you sure you want to {} this?\nPress 'y' for yes\nPress 'n' for no\n".format(edit)).strip().lower() # asks the user do they want to do this
+        if confirmation == "n" or confirmation == "no": # if user selects no then sends them back to the right backend and prints the message "response/admin has not been removed/added"
             if program == "magic8ball":
                 print(colour(210, 4, 35, "Response has not been added"))
                 magic_8_ball_backend()
-                new_response = ""
                 break
             elif program == "predeflists":
                 if edit == "remove":
@@ -407,10 +449,16 @@ def confirmation(program, edit):
                     break
 
             elif program == "admin":
-                admin_backend()
-                break
+                if edit == "remove":
+                    print(210, 4, 35, "Admin has not been removed")
+                    admin_backend()
+                    break
+                else:
+                    print(colour(210, 4, 35, "Admin has not been added"))
+                    admin_backend()
+                    break
 
-        elif confirmation == "y":
+        elif confirmation == "y" or confirmation == "yes": #continues the process
             break
         else:
             print(colour(210, 4, 35, "Invalid response please try again"))
