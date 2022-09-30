@@ -11,6 +11,7 @@ def main_menu(): #this is the main menu/hub of the code and this code connects a
         print(colour(255, 195, 30, "Type in the number corresponding to the Program you want to run"))
         menu = input("Press '0' to end program\nPress '1' to go to Magic 8 Ball\nPress '2' to go to Random Item from a Predefined List\nPress '3' to open Admin login menu\n") #asks the user what program they want to run
         if menu == "0":
+            break
             quit()
         elif menu == "1":
             magic_8_ball()
@@ -22,7 +23,7 @@ def main_menu(): #this is the main menu/hub of the code and this code connects a
             admin_login_menu()
             break
         else:
-            print(colour(210, 4, 35, "Invalid input please try again"))
+            print(colour(210, 4, 35, "Invalid input, please try again"))
             time.sleep(.8)
 
 
@@ -56,28 +57,30 @@ def predefined_lists():
             titles = json.load(f)
             for title in titles:
                 num += 1
-                print("Press '{}' for {}".format(num, title))
+                print("Press '{}' for '{}'".format(num, title))
+
+        try:
             predefined_lists_input = int(input())
 
         #redirecting the user to the main menu
-        if predefined_lists_input == 0:
-            main_menu()
-            break
+            if predefined_lists_input == 0:
+                main_menu()
+                break
         #prompting the user that you cannot input negative numbers
-        elif predefined_lists_input < 0:
-            print(colour(210, 4, 35, "Please do not input negative numbers!"))
-            time.sleep(0.5)
+            elif predefined_lists_input < 0 or predefined_lists_input > len(titles) -1:
+                print(colour(210, 4, 35, "Please input a valid number"))
+                time.sleep(0.5)
         # prints out a random item from the list they selected
-        else:
-            try:
-                dict = open('predefined_lists.json')
-                predefined_list = json.load(dict)
-                list_user_wants = (predefined_list[predefined_lists_input -1])
-                print(list_user_wants[random.randint(0, len(list_user_wants)-1)])
-                time.sleep(0.7)
-            except:
-                print(colour(210, 4, 35, "Invalid Input! Please try again"))
-                time.sleep(1.2)
+            else:
+
+                    dict = open('predefined_lists.json')
+                    predefined_list = json.load(dict)
+                    list_user_wants = (predefined_list[predefined_lists_input -1])
+                    print(list_user_wants[random.randint(0, len(list_user_wants)-1)])
+                    time.sleep(0.7)
+        except:
+            print(colour(210, 4, 35, "Invalid Input! Please try again"))
+            time.sleep(1.2)
 
 # this allows users to access the admin menu
 def admin_login_menu():
@@ -111,23 +114,27 @@ def admin_menu():
     # this is the hub of all the admin programs which connects all the programs together
     while True:
         print(colour(255, 195, 30, "\nWelcome to The Admin Menu"))
-        admin_menu_selector = int(input("Press '0' to return to main menu\nPress '1' to open Magic 8 Ball backend\nPress '2' to open Predefined lists backend\nPress '3' to add/remove admins\n"))
-        if admin_menu_selector == 0:
-            main_menu()
-            break
-        elif admin_menu_selector == 1:
-            magic_8_ball_backend()
-            break
-        elif admin_menu_selector == 2:
-            predefined_lists_backend()
-            break
-        elif admin_menu_selector == 3:
-            admin_backend()
-            break
-        else:
-            print(colour(210, 4, 35, "That's not a valid option!"))
+        try:
+            admin_menu_selector = int(input("Press '0' to return to main menu\nPress '1' to open Magic 8 Ball backend\nPress '2' to open Predefined lists backend\nPress '3' to add/remove admins\n"))
 
-
+            if admin_menu_selector == 0:
+                main_menu()
+                break
+            elif admin_menu_selector == 1:
+                magic_8_ball_backend()
+                break
+            elif admin_menu_selector == 2:
+                predefined_lists_backend()
+                break
+            elif admin_menu_selector == 3:
+                admin_backend()
+                break
+            else:
+                print(colour(210, 4, 35, "Please input a valid number"))
+                time.sleep(0.5)
+        except:
+            print(colour(210, 4, 35, "Invalid input! Please input a valid number"))
+            time.sleep(0.8)
 def admin_backend():
     while True:
         print(colour(255, 195, 30, "Welcome to the Admin Backend")) # asks the user what they would like to do in the admin backend
@@ -291,118 +298,132 @@ def predefined_lists_backend():
         try: # asks the user what they would like to do with the predefined list responses
             predefined_lists_input = int(input("Press '0' to return to admin menu\nPress '1' to create a new predefined list\nPress '2' to remove a predefined list\n"
                                            "Press '3' to add items to an existing predefined list\nPress '4' to remove items from an existing predefined list\n"))
-        except:
-            print(colour(210, 4, 35, "Invalid value please try again\n"))
-            time.sleep(0.5)
-
-        if predefined_lists_input == 0: # returns user back to admin menu
-            admin_menu()
-            break
+            if predefined_lists_input == 0:  # returns user back to admin menu
+                admin_menu()
+                break
 
 
-        elif predefined_lists_input == 1:
-            new_predefined_list_title = input("Please enter the name for the new predefined list you are going to create\n") #asks the user for the title of the new predef list
-            new_list_responses  = []
-            while True:
-                new_list_input_responses = input("Please enter the responses for the list, one at a time.\nPress '0' once you have finished adding the responses\n")
-                if new_list_input_responses == "0":
-                    break
-                else:
-                    new_list_responses.append(new_list_input_responses) # adding the users responses to the list
-                    print(new_list_responses)
-                    print(colour(0, 255, 0, "Added\n"))
+            elif predefined_lists_input == 1:
+                new_predefined_list_title = input(
+                    "Please enter the name for the new predefined list you are going to create\n")  # asks the user for the title of the new predef list
+                new_list_responses = []
+                while True:
+                    new_list_input_responses = input(
+                        "Please enter the responses for the list, one at a time.\nPress '0' once you have finished adding the responses\n")
+                    if new_list_input_responses == "0":
+                        break
+                    else:
+                        new_list_responses.append(new_list_input_responses)  # adding the users responses to the list
+                        print(new_list_responses)
+                        print(colour(0, 255, 0, "Added\n"))
 
-            print(new_predefined_list_title)
-            print(new_list_responses)
-            confirmation("predeflists", "add") # sends it to confirmation function
-            with open('predefined_lists_titles.json') as titles:
-                predefined_titles = json.load(titles) # loads up predefined titles json file
-                predefined_titles.append(new_predefined_list_title) # adds the title to the json file
-                with open('predefined_lists_titles.json', 'w') as json_update: # writes it back to the json file
-                    json.dump(predefined_titles, json_update)
-
-            with open('predefined_lists.json') as lists: #loads up predefined list json file
-                pre_lists = json.load(lists)
-                pre_lists.append(new_list_responses) # adds the new list's items to the json file
-                with open('predefined_lists.json', 'w') as json_update: # writes it back to the json file
-                    json.dump(pre_lists, json_update)
-            print(colour(0, 255, 0, "Successfully created new list!"))
-
-
-        elif predefined_lists_input == 2:
-            with open('predefined_lists_titles.json') as titles: # accessing the current titles and their items
-                predefined_list_titles = json.load(titles)
-
-            with open('predefined_lists.json') as lists:
-                predefined_list = json.load(lists)
-                num = 0
-
-                for title in predefined_list_titles: # printing out the lists
-                    num += 1
-                    print("Press '{}' to remove the list '{}'".format(num, title))
-                predefined_list_del = int(input(colour(255, 195, 30, "What predefined list would you like to delete? Please enter the number next to the response\n")))
-
-                confirmation("predeflists", "remove")
-                del predefined_list[(predefined_list_del - 1)]
-                del predefined_list_titles[(predefined_list_del - 1)]
-                with open('predefined_lists.json', 'w') as json_update:
-                    json.dump(predefined_list, json_update)
-
-                with open('predefined_lists_titles.json', 'w') as json_update:
-                    json.dump(predefined_list_titles, json_update)
-                print("List has been successfully removed")
-                time.sleep(0.8)
-
-        elif predefined_lists_input == 3:
-            predefined_input_titles("add") # asks the admin what title they would like to add items to
-            while True: # opens the titles and lists json
+                print(new_predefined_list_title)
+                print(new_list_responses)
+                confirmation("predeflists", "add")  # sends it to confirmation function
                 with open('predefined_lists_titles.json') as titles:
-                    predefined_titles = json.load(titles)
-                    with open('predefined_lists.json') as lists:
-                        predefined_lists = json.load(lists)
+                    predefined_titles = json.load(titles)  # loads up predefined titles json file
+                    predefined_titles.append(new_predefined_list_title)  # adds the title to the json file
+                    with open('predefined_lists_titles.json', 'w') as json_update:  # writes it back to the json file
+                        json.dump(predefined_titles, json_update)
 
-                        print("Current Responses: {}".format(predefined_lists[predefined_list_input])) # prints out the items from the admin selected titles
-                        time.sleep(0.8)
-                        # asks the admin for the item they would like to add
-                        new_predefined_item = input("What response would you like to add to {}?\nPress '0' to stop adding responses and return to Predefined Lists Backend\n".format(predefined_titles[predefined_list_input]))
-                        if new_predefined_item == "0": # sends the admin back to the predef list menu
-                            predefined_lists_backend()
-                            break
-                        else: # adds the response to the json
-                            predefined_lists[predefined_list_input].append(new_predefined_item)
-                            with open('predefined_lists.json', 'w') as json_update:
-                                json.dump(predefined_lists, json_update)
-                            print(colour(0, 255, 0, "Response successfully added"))
+                with open('predefined_lists.json') as lists:  # loads up predefined list json file
+                    pre_lists = json.load(lists)
+                    pre_lists.append(new_list_responses)  # adds the new list's items to the json file
+                    with open('predefined_lists.json', 'w') as json_update:  # writes it back to the json file
+                        json.dump(pre_lists, json_update)
+                print(colour(0, 255, 0, "Successfully created new list!"))
 
-        elif predefined_lists_input == 4:
-            predefined_input_titles("remove") # asks the user what title they would like to remove
-            while True:
-                with open('predefined_lists_titles.json') as titles: # opens the json files
-                    predefined_titles = json.load(titles)
-                    with open('predefined_lists.json') as lists:
-                        predefined_lists = json.load(lists)
 
-                        print("Current Responses: {}".format(predefined_lists[predefined_list_input])) # prints the current responses from the list the admin has selected
-                        time.sleep(0.8)
-                        num = 1
-                        print("What response would you like to remove from {}?\n\nPress '0' to stop removing responses and return to Predefined Lists Backend".format(predefined_titles[predefined_list_input]))
-                        for item in predefined_lists[predefined_list_input]: # prints responses
-                            print("Press '{}' to remove {}".format(num, item))
-                            num += 1
-                        try:
-                            remove_predefined_item = int(input())
-                            if remove_predefined_item == 0: # returns to predefined list backend
+            elif predefined_lists_input == 2:
+                with open('predefined_lists_titles.json') as titles:  # accessing the current titles and their items
+                    predefined_list_titles = json.load(titles)
+
+                with open('predefined_lists.json') as lists:
+                    predefined_list = json.load(lists)
+                    num = 0
+
+                    for title in predefined_list_titles:  # printing out the lists
+                        num += 1
+                        print("Press '{}' to remove the list '{}'".format(num, title))
+                    predefined_list_del = int(input(colour(255, 195, 30,
+                                                           "What predefined list would you like to delete? Please enter the number next to the response\n")))
+
+                    confirmation("predeflists", "remove")
+                    del predefined_list[(predefined_list_del - 1)]
+                    del predefined_list_titles[(predefined_list_del - 1)]
+                    with open('predefined_lists.json', 'w') as json_update:
+                        json.dump(predefined_list, json_update)
+
+                    with open('predefined_lists_titles.json', 'w') as json_update:
+                        json.dump(predefined_list_titles, json_update)
+                    print("List has been successfully removed")
+                    time.sleep(0.8)
+
+            elif predefined_lists_input == 3:
+                predefined_input_titles("add")  # asks the admin what title they would like to add items to
+                while True:  # opens the titles and lists json
+                    with open('predefined_lists_titles.json') as titles:
+                        predefined_titles = json.load(titles)
+                        with open('predefined_lists.json') as lists:
+                            predefined_lists = json.load(lists)
+
+                            print("Current Responses: {}".format(predefined_lists[
+                                                                     predefined_list_input]))  # prints out the items from the admin selected titles
+                            time.sleep(0.8)
+                            # asks the admin for the item they would like to add
+                            new_predefined_item = input(
+                                "What response would you like to add to {}?\nPress '0' to stop adding responses and return to Predefined Lists Backend\n".format(
+                                    predefined_titles[predefined_list_input]))
+                            if new_predefined_item == "0":  # sends the admin back to the predef list menu
                                 predefined_lists_backend()
                                 break
-                            else: # deletes the response from the list and writes it back to the json file
-                                remove_predefined_item -= 1
-                                del predefined_lists[predefined_list_input][remove_predefined_item]
+                            else:  # adds the response to the json
+                                predefined_lists[predefined_list_input].append(new_predefined_item)
                                 with open('predefined_lists.json', 'w') as json_update:
                                     json.dump(predefined_lists, json_update)
-                                print(colour(0, 255, 0, "Response successfully {}".format(colour(210, 4, 35, "removed"))))
-                        except:
-                            print(colour(210, 4, 35, "Invalid Value! Please try again"))
+                                print(colour(0, 255, 0, "Response successfully added"))
+
+            elif predefined_lists_input == 4:
+                predefined_input_titles("remove")  # asks the user what title they would like to remove
+                while True:
+                    with open('predefined_lists_titles.json') as titles:  # opens the json files
+                        predefined_titles = json.load(titles)
+                        with open('predefined_lists.json') as lists:
+                            predefined_lists = json.load(lists)
+
+                            print("Current Responses: {}".format(predefined_lists[
+                                                                     predefined_list_input]))  # prints the current responses from the list the admin has selected
                             time.sleep(0.8)
+                            num = 1
+                            print(
+                                "What response would you like to remove from {}?\n\nPress '0' to stop removing responses and return to Predefined Lists Backend".format(
+                                    predefined_titles[predefined_list_input]))
+                            for item in predefined_lists[predefined_list_input]:  # prints responses
+                                print("Press '{}' to remove {}".format(num, item))
+                                num += 1
+                            try:
+                                remove_predefined_item = int(input())
+                                if remove_predefined_item == 0:  # returns to predefined list backend
+                                    predefined_lists_backend()
+                                    break
+                                else:  # deletes the response from the list and writes it back to the json file
+                                    remove_predefined_item -= 1
+                                    del predefined_lists[predefined_list_input][remove_predefined_item]
+                                    with open('predefined_lists.json', 'w') as json_update:
+                                        json.dump(predefined_lists, json_update)
+                                    print(colour(0, 255, 0,
+                                                 "Response successfully {}".format(colour(210, 4, 35, "removed"))))
+                            except:
+                                print(colour(210, 4, 35, "Invalid Value! Please try again"))
+                                time.sleep(0.8)
+            else:
+                print(colour(210, 4, 35, "Invalid number! Please enter a valid number"))
+                time.sleep(0.8)
+        except:
+            print(colour(210, 4, 35, "Invalid value please try again\n"))
+            time.sleep(0.8)
+
+
 
 
 def predefined_input_titles(edit):
@@ -440,11 +461,11 @@ def confirmation(program, edit):
                 break
             elif program == "predeflists":
                 if edit == "remove":
-                    print(210, 4, 35, "Response has not been removed")
+                    print(210, 4, 35, "List has not been removed")
                     predefined_lists_backend()
                     break
                 else:
-                    print(colour(210, 4, 35, "Response has not been added"))
+                    print(colour(210, 4, 35, "List has not been added"))
                     predefined_lists_backend()
                     break
 
